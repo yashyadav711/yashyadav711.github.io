@@ -3,98 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Text Editor</title>
+    <title>Modern Text Editor</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #121212;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #121212;
             color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .editor-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #1e1e1e;
+            overflow: hidden;
         }
 
         .toolbar {
             display: flex;
-            justify-content: flex-start;
-            gap: 10px;
+            justify-content: flex-start; /* Align buttons to the left */
             padding: 10px;
-            background: #2a2a2a;
+            background: #1e1e1e;
+            gap: 10px;
         }
 
-        button {
-            background: cyan;
-            color: black;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background: #00bcd4;
-        }
-
-        #editor {
-            flex-grow: 1;
-            border: none;
-            padding: 20px;
-            font-size: 1.2rem;
+        .toolbar button {
+            padding: 8px 16px;
+            font-size: 16px;
             background: #333;
             color: white;
-            outline: none;
-            overflow-y: auto;
-            width: 100%;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
         }
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .toolbar {
-                flex-wrap: wrap;
-            }
+        .toolbar button:hover {
+            background: #444;
+        }
 
-            button {
-                flex: 1;
-                min-width: 70px;
-                text-align: center;
-            }
+        .icon-btn {
+            width: 48px; /* Increased button size */
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #333;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .icon-btn:hover {
+            background: #444;
+        }
+
+        .icon {
+            width: 24px; /* Adjusted icon size */
+            height: 24px;
+            fill: white;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-grow: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .line-numbers {
+            width: 50px;
+            padding: 10px;
+            text-align: right;
+            background: #1e1e1e;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+
+        .line-numbers div {
+            line-height: 24px;
+            color: #777;
+        }
+
+        textarea {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 24px;
+            background: #222;
+            color: white;
+            border: none;
+            resize: none;
+            outline: none;
+            overflow: auto;
         }
     </style>
 </head>
 <body>
+
+    <div class="toolbar">
+        <button onclick="clearText()">Clear</button>
+        <button class="icon-btn" onclick="downloadText()">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M12 16l4-5h-3V4h-2v7H8zM5 19v2h14v-2H5z"/>
+            </svg>
+        </button>
+    </div>
+
     <div class="editor-container">
-        <div class="toolbar">
-            <button onclick="formatText('bold')">B</button>
-            <button onclick="formatText('italic')">I</button>
-            <button onclick="formatText('underline')">U</button>
-            <button onclick="clearText()">Clear</button>
-        </div>
-        <div contenteditable="true" id="editor"></div>
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea id="editor" oninput="updateLineNumbers()"></textarea>
     </div>
 
     <script>
-        function formatText(command) {
-            document.execCommand(command, false, null);
+        const editor = document.getElementById("editor");
+        const lineNumbers = document.getElementById("lineNumbers");
+
+        function updateLineNumbers() {
+            const lines = editor.value.split("\n").length;
+            lineNumbers.innerHTML = "";
+            for (let i = 1; i <= lines; i++) {
+                const lineNumber = document.createElement("div");
+                lineNumber.textContent = i;
+                lineNumbers.appendChild(lineNumber);
+            }
         }
 
         function clearText() {
-            document.getElementById("editor").innerHTML = "";
+            editor.value = "";
+            updateLineNumbers();
         }
+
+        function downloadText() {
+            const blob = new Blob([editor.value], { type: "text/plain" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "text-editor.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        updateLineNumbers();
     </script>
+
 </body>
 </html>
