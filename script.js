@@ -9,14 +9,14 @@ const toolPages = {
     "json-formatter": "json-formatter.html",
     "stopwatch-timer": "stopwatch-timer.html",
     "text-case-converter": "text-case.html",
-    "url-encoder-decoder": "url-encoder.html"
+    "url-encoder-decoder": "url-encoder.html",
+    "time-zone-converter": "time-zone.html"
 };
 
 // Function to navigate to a tool
 function navigateTo(tool) {
-    // Check if the tool exists in the mapping
     if (toolPages.hasOwnProperty(tool)) {
-        window.location.href = `tools/${toolPages[tool]}`;
+        window.location.href = `tools/${toolPages[tool]}`;  // Ensure correct path
     } else {
         console.error("Invalid tool:", tool);
     }
