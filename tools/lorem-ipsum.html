@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorem Ipsum Generator</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121212; /* Matte Black */
+            font-family: 'Inter', sans-serif;
+            color: #ffffff; /* White */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .header h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .tools {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .tool-card {
+            background-color: #233d4d; /* Deep Blue */
+            padding: 30px;
+            width: 48%;  /* Adjusted to take up more width */
+            min-height: 300px;  /* Ensure minimum height for proper space */
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #f5f5f5; /* Light Gray */
+            border-radius: 4px;
+            background-color: #121212;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            font-size: 16px;
+        }
+
+        .generate-btn {
+            background-color: #007bff; /* Bright Blue */
+            color: #ffffff;
+            margin-bottom: 15px; /* Add margin below Generate Line button */
+        }
+
+        .generate-btn:hover {
+            background-color: #ff3b30; /* Red on Hover */
+        }
+
+        .copy-btn {
+            background-color: #ff1744; /* Red */
+            color: #ffffff;
+        }
+
+        .copy-btn:hover {
+            background-color: #dc3545; /* Deep Red on Hover */
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background-color: #121212;
+            color: #ffffff;
+            border: 1px solid #f5f5f5;
+            border-radius: 4px;
+            resize: none;
+            padding: 10px;
+        }
+
+        textarea[readonly] {
+            background-color: #233d4d; /* Deep Blue for readonly */
+        }
+
+        /* Ensuring responsiveness for small screens */
+        @media (max-width: 768px) {
+            .tools {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tool-card {
+                width: 100%;
+                max-width: 100%;
+                height: auto;  /* Let height adjust based on content */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Lorem Ipsum Generator</h1>
+        </header>
+
+        <div class="tools">
+            <div class="tool-card">
+                <h2>Generate a Line</h2>
+                <input type="number" id="lineCount" value="1" min="1" placeholder="Number of lines">
+                <button class="generate-btn" id="generateLineBtn">Generate Line</button>
+                <textarea id="lineOutput" readonly></textarea>
+                <button class="copy-btn" id="copyLineBtn">Copy</button>
+            </div>
+
+            <div class="tool-card">
+                <h2>Generate a Paragraph</h2>
+                <input type="number" id="paragraphCount" value="1" min="1" placeholder="Number of paragraphs">
+                <button class="generate-btn" id="generateParagraphBtn">Generate Paragraph</button>
+                <textarea id="paragraphOutput" readonly></textarea>
+                <button class="copy-btn" id="copyParagraphBtn">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array of variations for Lorem Ipsum text
+        const loremVariations = [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.",
+            "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.",
+            "Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
+            "Vestibulum lacinia arcu eget nulla. Nullam arcu dui, vestibulum eu, pulvinar at, malesuada eu, metus. In sit amet felis malesuada, feugiat purus eu, aliquet mauris."
+        ];
+
+        // Function to generate Lorem Ipsum text with random variations
+        const generateLoremIpsum = (type, count) => {
+            let output = '';
+            
+            for (let i = 0; i < count; i++) {
+                const variation = loremVariations[Math.floor(Math.random() * loremVariations.length)];
+                
+                if (type === 'line') {
+                    output += `${variation.split(' ').slice(0, 7).join(' ')}.\n`;
+                } else if (type === 'paragraph') {
+                    output += `${variation}\n\n`;
+                }
+            }
+
+            return output.trim();
+        }
+
+        // Event listeners for generating text
+        document.getElementById('generateLineBtn').addEventListener('click', () => {
+            const lineCount = document.getElementById('lineCount').value;
+            document.getElementById('lineOutput').value = generateLoremIpsum('line', lineCount);
+        });
+
+        document.getElementById('generateParagraphBtn').addEventListener('click', () => {
+            const paragraphCount = document.getElementById('paragraphCount').value;
+            document.getElementById('paragraphOutput').value = generateLoremIpsum('paragraph', paragraphCount);
+        });
+
+        // Copy button functionality
+        const copyText = (textId) => {
+            const textArea = document.getElementById(textId);
+            textArea.select();
+            document.execCommand('copy');
+        }
+
+        document.getElementById('copyLineBtn').addEventListener('click', () => {
+            copyText('lineOutput');
+        });
+
+        document.getElementById('copyParagraphBtn').addEventListener('click', () => {
+            copyText('paragraphOutput');
+        });
+    </script>
+</body>
+</html>
