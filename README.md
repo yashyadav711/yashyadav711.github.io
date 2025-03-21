@@ -52,7 +52,7 @@ To run the website locally:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yashyadav711/tools-dashboard.git
+   git clone https://github.com/yashyadav711/yashyadav711.github.io
    ```
 
 2. **Navigate to the project folder**:
