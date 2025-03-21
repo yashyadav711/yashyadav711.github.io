@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Time Zones</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh; /* Ensure the page fills the viewport */
+            overflow: auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #FF6F00; /* Modern Orange */
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap */
+            justify-content: center; /* Center the items horizontally */
+            gap: 20px; /* Add gap between items */
+            width: 100%; /* Ensure container takes up full width */
+            max-width: 1200px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .time-box {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 200px; /* Fixed width to maintain uniformity */
+            text-align: center; /* Ensure text is centered */
+        }
+
+        .country-name {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #f4c20d;
+        }
+
+        .city-name {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .time {
+            font-size: 1.5rem;
+            color: #f5f5f5;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 1200px) {
+            .container {
+                justify-content: center; /* Ensure items stay centered */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .time-box {
+                width: 180px; /* Slightly smaller for medium screens */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .time-box {
+                width: 150px; /* Even smaller for small screens */
+            }
+        }
+
+        @media (max-width: 400px) {
+            .time-box {
+                width: 100%; /* Full width for small devices */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Current Time in the World's Top 10 Countries</h1>
+
+    <div class="container" id="time-zone-container">
+        <!-- Time Zones will be dynamically injected here -->
+    </div>
+
+    <script>
+        const timeZones = {
+            "United States": {
+                "capital": "Washington, D.C.",
+                "timeZone": "America/New_York"
+            },
+            "China": {
+                "capital": "Beijing",
+                "timeZone": "Asia/Shanghai"
+            },
+            "India": {
+                "capital": "New Delhi",
+                "timeZone": "Asia/Kolkata"
+            },
+            "Germany": {
+                "capital": "Berlin",
+                "timeZone": "Europe/Berlin"
+            },
+            "Japan": {
+                "capital": "Tokyo",
+                "timeZone": "Asia/Tokyo"
+            },
+            "United Kingdom": {
+                "capital": "London",
+                "timeZone": "Europe/London"
+            },
+            "France": {
+                "capital": "Paris",
+                "timeZone": "Europe/Paris"
+            },
+            "Russia": {
+                "capital": "Moscow",
+                "timeZone": "Europe/Moscow"
+            },
+            "Brazil": {
+                "capital": "Brasília",
+                "timeZone": "America/Sao_Paulo"
+            },
+            "Canada": {
+                "capital": "Ottawa",
+                "timeZone": "America/Toronto"
+            }
+        };
+
+        // Function to create a time-box for each country
+        function displayTimeZones() {
+            const container = document.getElementById("time-zone-container");
+            Object.keys(timeZones).forEach((country) => {
+                const countryData = timeZones[country];
+
+                // Create the box for each country
+                const timeBox = document.createElement("div");
+                timeBox.classList.add("time-box");
+
+                // Country name
+                const countryName = document.createElement("div");
+                countryName.classList.add("country-name");
+                countryName.textContent = country;
+
+                // City name (capital)
+                const cityName = document.createElement("div");
+                cityName.classList.add("city-name");
+                cityName.textContent = countryData.capital;
+
+                // Current time
+                const timeDisplay = document.createElement("div");
+                timeDisplay.classList.add("time");
+                timeDisplay.id = `${country}-time`;
+                timeDisplay.textContent = "--:--:--";
+
+                // Append country name, city name, and time to the time box
+                timeBox.appendChild(countryName);
+                timeBox.appendChild(cityName);
+                timeBox.appendChild(timeDisplay);
+
+                // Append the time box to the container
+                container.appendChild(timeBox);
+            });
+        }
+
+        // Update the time in each time-box
+        function updateTimeZones() {
+            Object.keys(timeZones).forEach((country) => {
+                const countryData = timeZones[country];
+                const currentTime = new Date();
+                const localTime = new Date(currentTime.toLocaleString("en-US", { timeZone: countryData.timeZone }));
+
+                // Update the time for the specific country
+                const timeDisplay = document.getElementById(`${country}-time`);
+                timeDisplay.textContent = localTime.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            });
+        }
+
+        // Initialize the time zones and set interval for updates
+        displayTimeZones();
+        setInterval(updateTimeZones, 1000); // Update every second
+        updateTimeZones(); // Initial update
+    </script>
+</body>
+</html>
