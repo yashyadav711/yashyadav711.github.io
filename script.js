@@ -12,7 +12,8 @@ const toolPages = {
     "url-encoder": "url-encoder.html",
     "time-zone": "time-zone.html",
     "ip-suite": "ip-suite.html",
-    "lorem-ipsum": "lorem-ipsum.html"
+    "lorem-ipsum": "lorem-ipsum.html".
+    "dns-lookup": "dns-lookup.html"
 };
 
 // Function to navigate to a tool
