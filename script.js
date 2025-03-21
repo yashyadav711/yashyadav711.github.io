@@ -11,7 +11,8 @@ const toolPages = {
     "text-case": "text-case.html",
     "url-encoder": "url-encoder.html",
     "time-zone": "time-zone.html",
-    "ip-suite": "ip-suite.html"
+    "ip-suite": "ip-suite.html",
+    "lorem-ipsum": "lorem-ipsum.html"
 };
 
 // Function to navigate to a tool
