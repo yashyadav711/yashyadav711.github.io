@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Tools Suite</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff8c00;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            resize: none;
+        }
+
+        /* Buttons */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            color: black;
+            padding: 12px 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: 0.3s;
+            min-width: 150px;
+        }
+
+        /* Solid Button Colors */
+        .extract { background: #0072ff; }
+        .public-private { background: #ff416c; }
+        .sort { background: #32a852; }
+        .group { background: #ffcc00; }
+        .remove-duplicates { background: #c0392b; }
+        .clear { background: #777; }
+        .copy { background: #8e44ad; }
+        .download { background: #e67e22; }
+        .use-as-input { background: #3498db; }
+
+        button:hover { opacity: 0.8; }
+
+        /* Results */
+        .output-container {
+            text-align: left;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+
+        .copy-download {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>IP Tools Suite</h1>
+    
+    <div class="container">
+        <textarea id="ipInput" placeholder="Enter text containing IPv4 addresses..."></textarea>
+        
+        <div class="button-container">
+            <button class="extract" onclick="extractIPs()">Extract IPv4</button>
+            <button class="public-private" onclick="checkPublicPrivate()">Public/Private Check</button>
+            <button class="sort" onclick="sortIPs()">Sort IPs</button>
+            <button class="group" onclick="groupIPs()">Group IPs</button>
+            <button class="remove-duplicates" onclick="removeDuplicates()">Remove Duplicates</button>
+            <button class="clear" onclick="clearResults()">Clear</button>
+        </div>
+        
+        <div id="output" class="output-container">
+            <pre id="outputText"></pre>
+            <div class="copy-download">
+                <button class="copy" onclick="copyToClipboard()">Copy</button>
+                <button class="download" onclick="downloadResults()">Download</button>
+                <button class="use-as-input" onclick="useAsInput()">Use as Input</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function extractIPs() {
+            clearResults();
+            const text = document.getElementById('ipInput').value;
+            const ipRegex = /(?<![\w@])\b(?:\d{1,3}\.){3}\d{1,3}\b(?!\.\d|\w)/g;
+            let ips = text.match(ipRegex) || [];
+
+            function isValidIP(ip) {
+                return ip.split('.').every(octet => {
+                    const num = Number(octet);
+                    return num >= 0 && num <= 255;
+                });
+            }
+
+            ips = ips.filter(isValidIP);
+            showResults(ips, "Extracted IPv4 Addresses:");
+        }
+
+        function checkPublicPrivate() {
+            clearResults();
+            const text = document.getElementById('ipInput').value;
+            const ipRegex = /(?<![\w@])\b(?:\d{1,3}\.){3}\d{1,3}\b(?!\.\d|\w)/g;
+            const ips = text.match(ipRegex) || [];
+
+            const publicIPs = [];
+            const privateIPs = [];
+
+            ips.forEach(ip => {
+                if (/^(10\.)|(172\.(1[6-9]|2[0-9]|3[0-1])\.)|(192\.168\.)/.test(ip)) {
+                    privateIPs.push(ip);
+                } else {
+                    publicIPs.push(ip);
+                }
+            });
+
+            showResults([...publicIPs, "\nPrivate IPs:", ...privateIPs], "Public and Private IPs:");
+        }
+
+        function sortIPs() {
+            clearResults();
+            const text = document.getElementById('ipInput').value;
+            const ipRegex = /(?<![\w@])\b(?:\d{1,3}\.){3}\d{1,3}\b(?!\.\d|\w)/g;
+            const ips = text.match(ipRegex) || [];
+
+            const sortedIPs = ips.sort((a, b) => {
+                return a.split('.').map(Number).join('') - b.split('.').map(Number).join('');
+            });
+
+            showResults(sortedIPs, "Sorted IPv4 Addresses:");
+        }
+
+        function groupIPs() {
+            clearResults();
+            const text = document.getElementById('ipInput').value;
+            const ipRegex = /(?<![\w@])\b(?:\d{1,3}\.){3}\d{1,3}\b(?!\.\d|\w)/g;
+            const ips = text.match(ipRegex) || [];
+
+            const groups = {};
+            ips.forEach(ip => {
+                const prefix = ip.split('.').slice(0, 2).join('.') + '.*';
+                if (!groups[prefix]) groups[prefix] = [];
+                groups[prefix].push(ip);
+            });
+
+            let output = "";
+            for (const group in groups) {
+                output += `\n${group}:\n${groups[group].join('\n')}`;
+            }
+
+            showResults(output.split('\n'), "Grouped IPv4 Addresses:");
+        }
+
+        function removeDuplicates() {
+            clearResults();
+            const text = document.getElementById('ipInput').value;
+            const ipRegex = /(?<![\w@])\b(?:\d{1,3}\.){3}\d{1,3}\b(?!\.\d|\w)/g;
+            const ips = [...new Set(text.match(ipRegex) || [])];
+
+            showResults(ips, "Unique IPv4 Addresses:");
+        }
+
+        function showResults(data, title) {
+            const outputDiv = document.getElementById('output');
+            const outputText = document.getElementById('outputText');
+            outputText.innerText = title + "\n" + (data.length ? data.join("\n") : "No results found.");
+            outputDiv.style.display = "block";
+        }
+
+        function copyToClipboard() {
+        const copyButtons = document.querySelectorAll('.copy'); // Select all Copy buttons
+        const text = document.getElementById('outputText').innerText;
+        
+        navigator.clipboard.writeText(text).then(() => {
+            copyButtons.forEach(button => {
+                button.textContent = "Copied!";
+                button.style.backgroundColor = "#28a745"; // Green
+
+                // Revert back after 1.5s
+                setTimeout(() => {
+                    button.textContent = "Copy";
+                    button.style.backgroundColor = ""; // Reset
+                }, 1500);
+            });
+        });
+    }
+
+
+        function downloadResults() {
+            const text = document.getElementById('outputText').innerText;
+            const blob = new Blob([text], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "ip_results.txt";
+            link.click();
+        }
+
+        function useAsInput() {
+            const outputText = document.getElementById('outputText').innerText;
+            const ipRegex = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g;
+            const extractedIPs = outputText.match(ipRegex) || []; // Extract only IPs
+            document.getElementById('ipInput').value = extractedIPs.join("\n"); // Set as input
+        }
+
+
+        function clearResults() {
+            document.getElementById('output').style.display = "none";
+        }
+    </script>
+</body>
+</html>
