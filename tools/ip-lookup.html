@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Lookup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+        }
+        body {
+            background: #0f0f0f;
+            color: white;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Left Section - IP & Details */
+        .left-section {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: cyan;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .details {
+            font-size: 1.1em;
+            margin-top: 10px;
+            text-align: left;
+            width: 80%;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .copy-ip {
+            background: #ff0033;
+            color: white;
+        }
+
+        .copy-ip:hover {
+            background: #ff3355;
+        }
+
+        .refresh-ip {
+            background: #ff6600;
+            color: white;
+        }
+
+        .refresh-ip:hover {
+            background: #ff8533;
+        }
+
+        .copied {
+            background: #00ff00 !important;
+        }
+
+        /* Right Section - Full-Width Map */
+        .right-section {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .map-container {
+            width: 90%;
+            height: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-section, .right-section {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .map-container {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left: IP Details -->
+    <div class="left-section">
+        <h2>Your IP Address</h2>
+        <p class="info" id="ipv4">Fetching IPv4...</p>
+        <p class="info" id="ipv6">Fetching IPv6...</p>
+
+        <div class="details">
+            <p><strong>City:</strong> <span id="city">-</span></p>
+            <p><strong>Region:</strong> <span id="region">-</span></p>
+            <p><strong>Country:</strong> <span id="country">-</span></p>
+            <p><strong>Latitude:</strong> <span id="lat">-</span></p>
+            <p><strong>Longitude:</strong> <span id="lon">-</span></p>
+            <p><strong>Time Zone:</strong> <span id="timezone">-</span></p>
+            <p><strong>ISP:</strong> <span id="isp">-</span></p>
+        </div>
+
+        <div class="buttons">
+            <button class="refresh-ip" onclick="fetchIP()">Refresh IP</button>
+            <button class="copy-ip" id="copy-ipv4" onclick="copyIP('ipv4', 'copy-ipv4')">Copy IPv4</button>
+            <button class="copy-ip" id="copy-ipv6" onclick="copyIP('ipv6', 'copy-ipv6')">Copy IPv6</button>
+        </div>
+    </div>
+
+    <!-- Right: Full-Width Map -->
+    <div class="right-section">
+        <div class="map-container">
+            <iframe id="map" src="" style="display: none;"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function fetchIP() {
+            document.getElementById("ipv4").textContent = "Fetching IPv4...";
+            document.getElementById("ipv6").textContent = "Fetching IPv6...";
+            document.getElementById("city").textContent = "-";
+            document.getElementById("region").textContent = "-";
+            document.getElementById("country").textContent = "-";
+            document.getElementById("lat").textContent = "-";
+            document.getElementById("lon").textContent = "-";
+            document.getElementById("timezone").textContent = "-";
+            document.getElementById("isp").textContent = "-";
+            document.getElementById("map").style.display = "none";
+
+            // Fetch IPv4
+            fetch("https://api.ipify.org?format=json")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("ipv4").textContent = data.ip;
+                    fetchLocation(data.ip);
+                })
+                .catch(() => {
+                    document.getElementById("ipv4").textContent = "Error fetching IPv4.";
+                });
+
+            // Fetch IPv6
+            fetch("https://api64.ipify.org?format=json")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("ipv6").textContent = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById("ipv6").textContent = "IPv6 not available.";
+                });
+        }
+
+        function fetchLocation(ip) {
+            fetch(`https://ipapi.co/${ip}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("city").textContent = data.city || "-";
+                    document.getElementById("region").textContent = data.region || "-";
+                    document.getElementById("country").textContent = data.country_name || "-";
+                    document.getElementById("lat").textContent = data.latitude || "-";
+                    document.getElementById("lon").textContent = data.longitude || "-";
+                    document.getElementById("timezone").textContent = data.timezone || "-";
+                    document.getElementById("isp").textContent = data.org || "-";
+
+                    let lat = data.latitude;
+                    let lon = data.longitude;
+                    if (lat && lon) {
+                        document.getElementById("map").src = `https://www.google.com/maps?q=${lat},${lon}&output=embed`;
+                        document.getElementById("map").style.display = "block";
+                    }
+                })
+                .catch(() => {
+                    document.getElementById("city").textContent = "Error fetching location.";
+                });
+        }
+
+        function copyIP(type, buttonId) {
+            let ipText = document.getElementById(type).textContent;
+            navigator.clipboard.writeText(ipText);
+
+            let button = document.getElementById(buttonId);
+            button.textContent = "IP Copied!";
+            button.classList.add("copied");
+
+            setTimeout(() => {
+                button.textContent = type === "ipv4" ? "Copy IPv4" : "Copy IPv6";
+                button.classList.remove("copied");
+            }, 2000);
+        }
+
+        // Fetch IP details on page load
+        fetchIP();
+    </script>
+
+</body>
+</html>

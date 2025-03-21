@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder & Decoder</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #121212; color: white; text-align: center; padding: 20px; }
+        
+        .container { 
+            width: 90%; 
+            max-width: 800px; 
+            background: #1c1c1c; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            gap: 15px;
+        }
+
+        h1 { font-size: 2rem; }
+        
+        textarea { 
+            width: 100%; 
+            min-height: 150px;
+            height: 40vh; 
+            max-height: 250px;
+            padding: 15px; 
+            font-size: 1.2rem; 
+            background: #252525; 
+            color: white; 
+            border: 1px solid #333; 
+            border-radius: 8px; 
+            resize: vertical; 
+            outline: none; 
+        }
+
+        .btn-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            flex-wrap: wrap;
+        }
+
+        button { 
+            flex: 1; 
+            min-width: 100px;
+            max-width: 200px;
+            padding: 15px; 
+            font-size: 1rem; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: bold; 
+        }
+
+        .encode { background: #00c853; color: white; } /* Vibrant Green */
+        .decode { background: #d50000; color: white; } /* Bright Red */
+        .reset { background: #ffab00; color: white; } /* Deep Orange */
+
+        .encode:hover { background: #00e676; }
+        .decode:hover { background: #ff1744; }
+        .reset:hover { background: #ffc400; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            textarea { font-size: 1rem; height: 35vh; }
+            .btn-group { flex-direction: column; align-items: center; }
+            button { width: 100%; max-width: 100%; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Base64 Encoder & Decoder</h1>
+        <textarea id="textInput" placeholder="Enter text..."></textarea>
+        <div class="btn-group">
+            <button class="encode" onclick="encodeBase64()">Encode</button>
+            <button class="decode" onclick="decodeBase64()">Decode</button>
+            <button class="reset" onclick="resetText()">Clear</button>
+        </div>
+    </div>
+    <script>
+        function encodeBase64() {
+            let input = document.getElementById("textInput").value;
+            document.getElementById("textInput").value = btoa(input);
+        }
+
+        function decodeBase64() {
+            let input = document.getElementById("textInput").value;
+            try {
+                document.getElementById("textInput").value = atob(input);
+            } catch (e) {
+                document.getElementById("textInput").value = "Invalid Base64!";
+            }
+        }
+
+        function resetText() {
+            document.getElementById("textInput").value = "";
+        }
+    </script>
+</body>
+</html>
