@@ -1,0 +1,92 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #181818; /* Matte Black */
+    color: #dec4a1; /* Dun */
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Title */
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #e84855; /* Red Crayola */
+}
+
+/* Category Titles */
+.category-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    color: #dec4a1; /* Dun */
+    display: inline-block;
+    border-bottom: 2px solid #6a5837; /* Field Drab */
+    padding-bottom: 5px;
+}
+
+/* Tools Container */
+.tools-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Ensures symmetry */
+    gap: 20px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Tool Cards */
+.tool-card {
+    background: #16425b; /* Dark Blue-Grey */
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.08); /* Subtle white glow */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    border: 1px solid #6a5837; /* Field Drab */
+    width: 220px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tool Card Titles */
+.tool-card h2 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #dec4a1; /* Dun */
+}
+
+/* Tool Card Descriptions */
+.tool-card p {
+    font-size: 0.9rem;
+    color: #76bed0; /* Sky Blue */
+}
+
+/* Hover Effect */
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 12px rgba(255, 255, 255, 0.15);
+    border-color: #e84855; /* Red Crayola */
+    background: #dd2d4a; /* Vivid Red */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tools-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tool-card {
+        width: 80%;
+    }
+}

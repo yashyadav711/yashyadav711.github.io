@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Tools Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 class="title">Tools Dashboard</h1>
+
+        <!-- General Utilities -->
+        <h2 class="category-title">General Utilities</h2>
+        <div class="tools-container">
+            <div class="tool-card" onclick="navigateTo('calculator')">
+                <h2>Calculator</h2>
+                <p>Perform basic calculations</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('currency-converter')">
+                <h2>Currency Converter</h2>
+                <p>Convert currencies easily</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('time-zone')">
+                <h2>Time Zone Converter</h2>
+                <p>Convert time zones easily</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('stopwatch-timer')">
+                <h2>Stopwatch & Timer</h2>
+                <p>Track time with precision</p>
+            </div>
+        </div>
+
+        <!-- Text & Data Tools -->
+        <h2 class="category-title">Text & Data Tools</h2>
+        <div class="tools-container">
+            <div class="tool-card" onclick="navigateTo('text-editor')">
+                <h2>Text Editor</h2>
+                <p>Write and edit notes</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('text-case')">
+                <h2>Text Case Converter</h2>
+                <p>Change text case easily</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('json-formatter')">
+                <h2>JSON Formatter</h2>
+                <p>Format and validate JSON data</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('url-encoder')">
+                <h2>URL Encoder/Decoder</h2>
+                <p>Encode and decode URLs</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('base64')">
+                <h2>Base64 Encoder/Decoder</h2>
+                <p>Encode and decode Base64 data</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('color-palette-generator')">
+                <h2>Color Palette Generator</h2>
+                <p>Generate beautiful color palettes</p>
+            </div>
+        </div>
+
+        <!-- Networking & IP Tools -->
+        <h2 class="category-title">Networking & IP Tools</h2>
+        <div class="tools-container">
+            <div class="tool-card" onclick="navigateTo('ip-lookup')">
+                <h2>IP Lookup</h2>
+                <p>Find your public IP and location</p>
+            </div>
+            <div class="tool-card" onclick="navigateTo('ip-suite')">
+                <h2>IP Tools Suite</h2>
+                <p>Extract, validate, and analyze IPs</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
